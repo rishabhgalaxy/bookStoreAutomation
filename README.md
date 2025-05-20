@@ -1,87 +1,84 @@
-# 📚 Bookstore API Automation with CI/CD Integration
-  ## Book store E2E API Automation using Cucumber BDD+ TestNG in Java
+Bookstore  Automation with CI/CD Integration
+Overview
+This project is an end-to-end automation framework built for a Bookstore application using Cucumber BDD + TestNG in Java. It integrates with Jenkins for CI/CD and uses Allure for reporting.
 
-## 💻 Tech Stack Overview
+Tech Stack Used
+IDE: IntelliJ IDEA
 
-| Component               | Description                                                                 
-|-------------------------|-----------------------------------------------------------------------------
-| 🧠 **IDE**              | IntelliJ IDEA                                                               
-| ☕ **Language**          | Java 11+                                                                    
-| 🔄 **Framework**        | Rest Assured+ Cucumber BDD – For readable, behavior-driven API automation 
-| 🛠 **Build Tool**       | Maven – For dependency management & CI/CD integrations 
-| ✅ **Test Execution**   | TestNG Chosen for test execution, parallel runs, retries & CI/CD integration
-| 📊 **Reporting**        | Allure ReportFor visual insights into test runs, categorization, and history
+Language: Java 11 or above
 
---------------------
-## 🧪 Why This Stack?
+Framework: Rest Assured with Cucumber BDD for behavior-driven API testing
 
-### ✅ TestNG over JUnit
-- Better suited for **non-Spring Boot** projects.
-- Robust test orchestration: **retry mechanisms**, **parallel execution**, **custom listeners**.
-- Seamless CI/CD compatibility.
+Build Tool: Maven, used for managing dependencies and integrating with CI/CD
 
-### 📈 Allure Report Advantages
-- Rich UI with detailed **test case visualization**.
-- Categorizes failures:
-  - **Test Failures** → Assertion errors, unstable test scripts.
-  - **Product Failures** → Server errors (5xx), broken environments.
-- Maintains history & trends of failure across builds.
-- Integrated easily with **CI pipelines** (e.g., Jenkins, GitHub Actions).
+Test Execution: TestNG, used for test execution with support for parallel runs, retries, and listeners
 
-------------------------------
-**How to Set Up & Run the Project**
+Reporting: Allure Report, used for generating visually rich test reports with categorization and history tracking
 
- **Prerequisites**
- 
-1) Java 11+
-2)  Maven
+Why This Stack?
+Why TestNG over JUnit?
+TestNG is better suited for projects not using Spring Boot.
 
- 1) Create a new maven project for automation or clone from the github if already present
- 2) Fork the Dev repo given and make it up in the local machine , to run the automation (The steps will be present in README.md of Dev repo)
- 3) End Points automated covered in this automation are:
-   
-     * POST /signup – To sign up to the book store
-     * POST /login – To login after sign up and generate a token
-     * POST /books – Create a new book
-     * PUT /books/{id} – Update an existing book
-     * GET /books/{id} – Fetch a book by ID
-     * GET /books – Fetch all books
-     * DELETE /books/{id} – Delete a book
+It provides better control over test execution such as retries, parallel runs, and custom listeners.
 
-6) Execute the automation suite by running the Cucumber Runner. This will trigger all feature scenarios written in a human-readable format, ensuring comprehensive test coverage and clear visibility into the executed test cases.
-7) Once done , Allure- reports will be generate and can be seen under target/allure-results
+It integrates easily with Jenkins and other CI/CD tools.
 
-# **🚀 CI/CD Integration**
+Why Allure?
+Allure offers a rich and user-friendly interface for viewing test results.
 
-## **✅ Prerequisites:**    
+It categorizes failures clearly into test failures (e.g., assertion errors) and product/environment failures (e.g., 5xx errors).
 
-   Install Jenkins and necessary plugins - Git ,Github,Pipeline , Maven and Allure plugins ( these plugins can be installed via Jenkins UI )
-   
-   Ngrok (for development purpose)
+It maintains test history and trends across builds.
 
-## **STEPS To be followed for CI/CD:** ( for development purpose - testing env)
+It integrates easily with CI pipelines like Jenkins and GitHub Actions.
 
-1) Need to add jenkinsFile in Dev repo - which is to build dev code and trigger QA automation
+How to Set Up and Run the Project
+Prerequisites
+Java 11 or above
 
-<pre lang="groovy"><code>pipeline { agent any stages { stage('Build Dev') { steps { echo 'Build or test dev code here' } } stage('Trigger QA Automation') { steps { build job: 'QA-Repo' } } } } </code></pre>
+Maven installed
 
-  
-2) JenkinsFile in QA repo has to be included to run and generate report
+Steps to Set Up
+Create a new Maven project or clone the existing one from GitHub.
 
-<pre lang="groovy"><code>pipeline { agent any tools { maven 'Maven 3.6.3' allure 'Allure' } stages { stage('Checkout') { steps { git url: '&lt;gitUrl&gt;', branch: '&lt;BranchName&gt;' } } stage('Build and Test') { steps { sh 'mvn clean test' } } stage('Generate Allure Report') { steps { sh 'mvn allure:report' } } } post { always { allure([ includeProperties: false, jdk: '', results: [[path: 'target/allure-results']] ]) } } }</code></pre>
+Fork the development (Dev) repository and set it up on your local machine.
 
-3) Launch the Jenkins ( using jenkins command ) in Local , once launched , install all the plugins needed
-4) Create 2 jobs as type pipeline for configuring Dev and QA repo
-5) Configure the repo in their respective jobs and also make the configuration as necessary
-6) In Dev repo Webhooks - Need to add payload url for triggering the Dev Job whenever dev commits the code
-7) Since github can't access your local , run ngrok command to let public access for your local server
+The setup steps for the Dev repo will be available in its README file.
 
-           ngrok http http://localhost:8080 
-8) It will generate the url , use that as payload url along with repo name (eg : https://gitUserName:gitPassword@ngrokServerProvided/job/DevRepo/build )//Replace with your dev repo name
-9) Now commit any changes in Dev repo . The build will be triggered in Dev jenkins job and on success,QA automation job will be run and generate Allure report at last
-10) Now for every commit dev makes , the Dev build and QA automation will get triggered .
+The following API endpoints are automated in this project:
 
-                                                        END
+POST /signup: To register a user
 
+POST /login: To log in and generate a token
 
-   
+POST /books: To create a new book
+
+PUT /books/{id}: To update an existing book
+
+GET /books/{id}: To retrieve a book by ID
+
+GET /books: To fetch all books
+
+DELETE /books/{id}: To delete a book
+
+To execute the automation suite, run the Cucumber TestNG runner.
+
+After test execution, Allure reports will be generated in the target/allure-results folder.
+
+CI/CD Integration (Jenkins)
+Prerequisites
+Jenkins installed on your local system
+
+Necessary Jenkins plugins installed:
+
+Git
+
+GitHub Integration
+
+Pipeline
+
+Maven Integration
+
+Allure Jenkins Plugin
+
+Ngrok installed (for exposing Jenkins on localhost to GitHub)
